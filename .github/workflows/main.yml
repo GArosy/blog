@@ -27,13 +27,13 @@ jobs:
       # 创建生产环境配置文件
       - name: Create env file
         run: |
-          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env.production
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env.production
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.production
-          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.production
-          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.production
-          echo "GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}" >> .env.production
-          echo "GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}" >> .env.production
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env
+          echo "GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}" >> .env
+          echo "GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}" >> .env
 
       - name: Deploy
         uses: easingthemes/ssh-deploy@main
@@ -53,5 +53,5 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /home/www/blog
-            docker compose --env-file .env.production up -d
+            docker-compose -f docker-compose.prod.yml up
             pm2 start npm --name "blog" -- start
