@@ -9,6 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     environment: blog
     steps:
+      - name: Print secrets
+        run: |
+          echo "POSTGRES_USER: ${{ secrets.POSTGRES_USER }}"
+          echo "POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}"
+          echo "DATABASE_URL: ${{ secrets.DATABASE_URL }}"
+          echo "NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}"
+          echo "NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}"
+          echo "NEXTAUTH_GITHUB_ID: ${{ secrets.NEXTAUTH_GITHUB_ID }}"
+          echo "NEXTAUTH_GITHUB_SECRET: ${{ secrets.NEXTAUTH_GITHUB_SECRET }}"
+          echo "SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}"
+          echo "SERVER_HOST: ${{ secrets.SERVER_HOST }}"
+          echo "SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}"
+
       - name: Checkout
         uses: actions/checkout@v4
 
