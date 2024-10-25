@@ -2,8 +2,6 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import prisma from '@/lib/prisma'
 
-import { UserJwt, UserSession } from '@/types/user'
-
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
@@ -29,7 +27,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token }) {
       return token
     },
-    async session({ session, token }: { session: UserSession; token: UserJwt }) {
+    async session({ session, token }: any) {
       // upsert 更新或插入
       // 确保了数据库中的用户信息与认证提供者（GitHub）保持同步，并在每次用户登录时更新
       await prisma.user.upsert({
