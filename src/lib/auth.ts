@@ -1,21 +1,16 @@
-import NextAuth, {
-  NextAuthOptions,
-} from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import prisma from "@/lib/prisma";
+import NextAuth, { NextAuthOptions } from 'next-auth'
+import GithubProvider from 'next-auth/providers/github'
+import prisma from '@/lib/prisma'
 
-import {
-  UserJwt,
-  UserSession,
-} from "@/types/user";
+import { UserJwt, UserSession } from '@/types/user'
 
 export const authOptions: NextAuthOptions = {
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   pages: {
-    signIn: "/auth/login",
-    signOut: "/auth/logout",
+    signIn: '/auth/login',
+    signOut: '/auth/logout',
   },
   providers: [
     GithubProvider({
@@ -31,19 +26,13 @@ export const authOptions: NextAuthOptions = {
     // }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
-      return token;
+    async jwt({ token }) {
+      return token
     },
-    async session({
-      session,
-      token,
-    }: {
-      session: UserSession;
-      token: UserJwt;
-    }) {
+    async session({ session, token }: { session: UserSession; token: UserJwt }) {
       // upsert 更新或插入
       // 确保了数据库中的用户信息与认证提供者（GitHub）保持同步，并在每次用户登录时更新
-      const res = await prisma.user.upsert({
+      await prisma.user.upsert({
         // 查找条件为token.sub
         where: {
           sub: token.sub,
@@ -60,12 +49,12 @@ export const authOptions: NextAuthOptions = {
           username: token.name,
           avatar: token.picture,
           email: token.email,
-          platform: "github",
+          platform: 'github',
         },
-      });
-      return session;
+      })
+      return session
     },
   },
-};
+}
 
-export default NextAuth(authOptions);
+export default NextAuth(authOptions)
