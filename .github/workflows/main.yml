@@ -53,5 +53,5 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /home/www/blog
-            docker-compose -f docker-compose.prod.yml up
+            docker-compose -f docker-compose.prod.yml up -d
             pm2 start npm --name "blog" -- start
