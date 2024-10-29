@@ -59,7 +59,14 @@ jobs:
             export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-            sudo systemctl status docker
-            pm2 start npm --name "blog" -- start
-            docker-compose -f docker-compose.prod.yml up -d
+            if pm2 list | grep -q "blog"; then
+              pm2 restart "blog"
+            else
+              pm2 start npm --name "blog" -- start
+            fi
+            if [ "$(docker ps -q -f name=blog_db_1)" ]; then
+              docker restart blog_db_1
+            else
+              docker-compose -f docker-compose.prod.yml up -d
+            fi
             npx prisma migrate deploy
