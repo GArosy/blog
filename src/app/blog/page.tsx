@@ -1,9 +1,14 @@
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <main className='w-full py-6'>
-      <h1 className='mb-6 text-xl font-bold'>最新博客文章</h1>
+    <main className='w-full py-3'>
+      <div className='flex justify-end'>
+        <Button asChild>
+          <Link href='/blog/submit'>新增文章</Link>
+        </Button>
+      </div>
       <div className='space-y-8'>
         {/* 文章列表 */}
         {Array.from({ length: 10 }).map((_, i) => (

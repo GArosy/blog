@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button'
 
 export default function AuthForm() {
   const { data: session, status } = useSession()
-  console.log(session, status)
 
   const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false)
 
