@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import DatePicker from '@/components/calendar'
 
 export default function Submit() {
-  const [date, setDate] = useState<Date>()
+  const [date, setDate] = useState<Date>(new Date())
   const [title, setTitle] = useState<string>('')
   const [content, setContent] = useState<string>('')
   const [editor, setEditor] = useState<any>()
