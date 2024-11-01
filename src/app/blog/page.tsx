@@ -1,7 +1,15 @@
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import prisma from '@/lib/prisma'
+import { Button } from '@/components/ui/button'
+import { format } from 'date-fns'
 
-export default function Home() {
+export default async function Blog() {
+  const posts = await prisma.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
   return (
     <main className='w-full py-3'>
       <div className='flex justify-end'>
@@ -9,15 +17,12 @@ export default function Home() {
           <Link href='/blog/submit'>新增文章</Link>
         </Button>
       </div>
-      <div className='space-y-8'>
+      <div className='divide-y'>
         {/* 文章列表 */}
-        {Array.from({ length: 10 }).map((_, i) => (
-          <article key={i} className='border-b pb-6'>
-            <Button variant='link' className='p-0 text-xl'>
-              文章标题{i + 1}
-            </Button>
-            <p className='mb-4 text-gray-600'>发布日期：2024年3月15日</p>
-            <p className='text-gray-800'>这里是文章摘要，简要介绍文章内容...</p>
+        {posts.map((item, index) => (
+          <article key={index} className='py-4'>
+            <Link href={`/blog/${item.id}`}>{item.title}</Link>
+            <p className='text-sm text-gray-600'>{format(item.createdAt, 'yyyy-MM-dd')}</p>
           </article>
         ))}
       </div>

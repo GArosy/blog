@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { UserProvider } from '@/contexts/user'
 
 import localFont from 'next/font/local'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/header'
+import { Toaster } from '@/components/ui/toaster'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -33,10 +33,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} flex min-h-screen flex-col bg-stone-50 antialiased`}
       >
-        <UserProvider>
-          <Header />
-          <main className='container-custom mx-auto min-h-[calc(100vh-56px)]'>{children}</main>
-        </UserProvider>
+        <Header />
+        <main className='container-custom mx-auto min-h-[calc(100vh-56px)]'>{children}</main>
+        <Toaster />
       </body>
     </html>
   )

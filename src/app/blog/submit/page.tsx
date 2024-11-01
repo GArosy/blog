@@ -1,29 +1,53 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Editor from '@/components/editor'
+import { Editor } from '@tiptap/react'
+import TipTapEditor from '@/components/editor'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import DatePicker from '@/components/calendar'
+import { useToast } from '@/hooks/use-toast'
 
 export default function Submit() {
-  const [date, setDate] = useState<Date>(new Date())
+  const { toast } = useToast()
+  const [createdAt, setCreatedAt] = useState<Date>(new Date())
   const [title, setTitle] = useState<string>('')
+  const [tags, setTags] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [editor, setEditor] = useState<any>()
+  const [editor, setEditor] = useState<Editor | undefined>()
   const [imageUrl, setImageUrl] = useState<string>('')
   useEffect(() => {
     // 获取服务器时间
     fetch('/api/time')
       .then((res) => res.json())
       .then((data) => {
-        setDate(new Date(data.timestamp))
+        setCreatedAt(new Date(data.timestamp))
       })
   }, [])
 
-  const handleSubmit = () => {
-    console.log(date, title, content)
+  const handleSubmit = async () => {
+    try {
+      const body = {
+        createdAt,
+        title,
+        content,
+        tags,
+      }
+      const res = await fetch('/api/post/create', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      })
+      if (res.status === 200) {
+        toast({
+          title: '发布成功',
+        })
+      }
+    } catch (error) {
+      toast({
+        title: '发布失败',
+      })
+    }
   }
   const handleAddImage = () => {
     editor?.chain().focus().setImage({ src: imageUrl }).run()
@@ -33,16 +57,17 @@ export default function Submit() {
     <div className='space-y-4 py-6'>
       <div className='flex items-center justify-between'>
         <div className='text-xl font-medium'>新增文章</div>
-        <DatePicker date={date} setDate={setDate} />
+        <DatePicker date={createdAt} setDate={setCreatedAt} />
       </div>
+      <Input placeholder='文章标题' value={title} onChange={(e) => setTitle(e.target.value)} />
       <Input
-        className=''
-        placeholder='请输入文章标题'
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        style={{ fontStyle: 'italic' }}
+        placeholder='标签'
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
       />
       <div className='rounded-lg border shadow-sm focus-within:ring-1 focus-within:ring-black'>
-        <Editor content={content} setContent={setContent} onRefReady={setEditor} />
+        <TipTapEditor content={content} setContent={setContent} onRefReady={setEditor} />
       </div>
       <div className='flex justify-between'>
         <Popover>

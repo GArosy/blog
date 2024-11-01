@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -17,10 +17,34 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   sub       String   @unique // 第三方平台的唯一id
-  platform  String   // 第三方平台标识，如：github google
+  platform  String // 第三方平台标识，如：github google
   username  String
   avatar    String
   email     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  author    String
+  avatar    String
+  tags      String[]
+  createdAt DateTime  @default(now())
+  content   String
+  comments  Comment[]
+
+  @@index([tags], name: "tags_index")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  content   String
+  author    String // 可以记录评论者的名字或ID
+  avatar    String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
 }
