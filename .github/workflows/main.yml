@@ -21,10 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
-
-      # 创建生产环境配置文件
       - name: Create env file
         run: |
           echo "" > .env
@@ -36,6 +32,11 @@ jobs:
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env
           echo "GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}" >> .env
           echo "GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}" >> .env
+
+      - name: Build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run build
 
       - name: Deploy
         uses: easingthemes/ssh-deploy@main
