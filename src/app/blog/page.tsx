@@ -9,6 +9,7 @@ export default async function Blog() {
       createdAt: 'desc',
     },
   })
+  console.log('posts', posts)
 
   return (
     <main className='w-full py-3'>
