@@ -8,8 +8,10 @@ const nextConfig = {
       },
     ],
   },
-  compiler: {
-    removeConsole: false,
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
 }
 

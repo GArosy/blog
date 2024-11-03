@@ -3,13 +3,16 @@ import prisma from '@/lib/prisma'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
 
+// ISR Cache
+export const revalidate = 60
+
 export default async function Blog() {
   const posts = await prisma.post.findMany({
     orderBy: {
       createdAt: 'desc',
     },
   })
-  console.log('posts', posts)
+  console.log('posts length: ', posts?.length)
 
   return (
     <main className='w-full py-3'>
