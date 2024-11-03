@@ -11,7 +11,7 @@ export default async function BlogPost({ params }) {
   if (!post) {
     return notFound()
   }
-  console.log('post title: ', post.title)
+  console.log('Regenerate post - title: ', post.title, 'at', new Date().toISOString())
   return (
     <main className='w-full py-6'>
       <h1 className='text-2xl font-bold'>{post.title}</h1>

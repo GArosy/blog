@@ -12,7 +12,7 @@ export default async function Blog() {
       createdAt: 'desc',
     },
   })
-  console.log('posts length: ', posts?.length)
+  console.log('Regenerate posts - length: ', posts?.length, 'at', new Date().toISOString())
 
   return (
     <main className='w-full py-3'>
